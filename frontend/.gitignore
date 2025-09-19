@@ -1,0 +1,28 @@
+# Build outputs
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# Database files  
+*.db
+*.db-shm
+*.db-wal
+
+# IDE files
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Node modules (for Vue.js later)
+node_modules/
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

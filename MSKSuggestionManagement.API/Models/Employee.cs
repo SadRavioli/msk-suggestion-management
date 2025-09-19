@@ -1,0 +1,14 @@
+using MSKSuggestionManagement.API.Enums;
+
+namespace MSKSuggestionManagement.API.Models
+{
+    public class Employee
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Department { get; set; } = string.Empty;
+        public RiskLevel RiskLevel { get; set; } = RiskLevel.Low;
+        
+        public List<Suggestion> Suggestions { get; set; } = [];
+    }
+}
