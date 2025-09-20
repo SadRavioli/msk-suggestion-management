@@ -1,6 +1,0 @@
-@MSKSuggestionManagement.API_HostAddress = http://localhost:5246
-
-GET {{MSKSuggestionManagement.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
