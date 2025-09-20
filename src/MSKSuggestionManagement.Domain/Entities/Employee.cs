@@ -1,6 +1,6 @@
-using MSKSuggestionManagement.API.Enums;
+using MSKSuggestionManagement.Domain.Enums;
 
-namespace MSKSuggestionManagement.API.Models
+namespace MSKSuggestionManagement.Domain.Entities
 {
     public class Employee
     {

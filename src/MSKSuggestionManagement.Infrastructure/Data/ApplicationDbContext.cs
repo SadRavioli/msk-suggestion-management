@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MSKSuggestionManagement.API.Models;
+using MSKSuggestionManagement.Domain.Entities;
 
-namespace MSKSuggestionManagement.API.Data
+namespace MSKSuggestionManagement.Infrastructure.Data
 {
     public class ApplicationDbContext : DbContext
     {

@@ -1,4 +1,4 @@
-namespace MSKSuggestionManagement.API.Enums
+namespace MSKSuggestionManagement.Domain.Enums
 {
     public enum SuggestionSource
     {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MSKSuggestionManagement.API.Data;
-using MSKSuggestionManagement.API.Models;
+using MSKSuggestionManagement.Infrastructure.Data;
+using MSKSuggestionManagement.Domain.Entities;
 
 namespace MSKSuggestionManagement.API.Controllers
 {
