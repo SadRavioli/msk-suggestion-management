@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MSKSuggestionManagement.Infrastructure.Data;
-using MSKSuggestionManagement.Domain.Entities;
+using MSKSuggestionManagement.Application.Services;
+using MSKSuggestionManagement.Application.Dtos;
 
 namespace MSKSuggestionManagement.API.Controllers
 {
@@ -9,18 +8,25 @@ namespace MSKSuggestionManagement.API.Controllers
     [Route("api/[controller]")]
     public class EmployeesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private IEmployeeService _EmployeeService { get; set; }
 
-        public EmployeesController(ApplicationDbContext context)
+        public EmployeesController(IEmployeeService employeeService)
         {
-            _context = context;
+            _EmployeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Employee>>> GetEmployees()
+        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployees()
         {
-            var employees = await _context.Employees.ToListAsync();
-            return Ok(employees);
+            var employeeDtos = await _EmployeeService.GetEmployees();
+            return Ok(employeeDtos);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<EmployeeDto>> AddEmployee(EmployeeDto dto)
+        {
+            var newEmployeeDto = await _EmployeeService.AddEmployee(dto);
+            return Ok(newEmployeeDto);
         }
     }
 }

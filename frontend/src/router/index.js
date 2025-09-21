@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import 'bootstrap';
 // import EmployeeTable from '../views/HomeView.vue'
 
 const router = createRouter({
