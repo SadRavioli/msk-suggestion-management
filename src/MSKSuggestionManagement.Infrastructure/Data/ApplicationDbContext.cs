@@ -19,6 +19,14 @@ namespace MSKSuggestionManagement.Infrastructure.Data
                 .WithMany(e => e.Suggestions)
                 .HasForeignKey(s => s.EmployeeId);
 
+            modelBuilder.Entity<Suggestion>()
+                .Property(s => s.Id)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Employee>()
+                .Property(e => e.Id)
+                .HasConversion<string>();
+
             // Configure enums to be stored as strings
             modelBuilder.Entity<Employee>()
                 .Property(e => e.RiskLevel)

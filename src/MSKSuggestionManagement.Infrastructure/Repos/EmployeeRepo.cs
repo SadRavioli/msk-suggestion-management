@@ -7,22 +7,28 @@ namespace MSKSuggestionManagement.Infrastructure.Repos
 {
     public class EmployeeRepo : IEmployeeRepo
     {
-        private ApplicationDbContext DbContext { get; set; }
+        private ApplicationDbContext _DbContext { get; set; }
 
         public EmployeeRepo(ApplicationDbContext dbContext)
         {
-            DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
         public async Task<IEnumerable<Employee>> GetEmployees()
         {
-            return await DbContext.Employees.AsNoTracking().ToListAsync();
+            return await _DbContext.Employees.AsNoTracking().ToListAsync();
         }
+
+        public async Task<Employee?> GetEmployeeById(Guid id)
+        {
+            return await _DbContext.Employees.FirstOrDefaultAsync(s => s.Id == id);
+        }
+
 
         public async Task<Employee> AddEmployee(Employee employee)
         {
-            DbContext.Employees.Add(employee);
-            await DbContext.SaveChangesAsync();
+            _DbContext.Employees.Add(employee);
+            await _DbContext.SaveChangesAsync();
 
             return employee;
         }

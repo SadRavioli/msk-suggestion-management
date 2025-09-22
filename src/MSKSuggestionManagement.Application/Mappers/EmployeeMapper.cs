@@ -12,8 +12,7 @@ namespace MSKSuggestionManagement.Application.Mappers
                 Id = dto.Id,
                 Name = dto.FullName,
                 Department = dto.Department,
-                RiskLevel = dto.RiskLevel,
-                // Suggestions = dto.Suggestions
+                RiskLevel = dto.RiskLevel
             };
         }
 
@@ -24,8 +23,7 @@ namespace MSKSuggestionManagement.Application.Mappers
                 Id = employee.Id,
                 FullName = employee.Name,
                 Department = employee.Department,
-                RiskLevel = employee.RiskLevel,
-                // Suggestions = employee.Suggestions ?? new IEnumerable<SuggestionDto>{};
+                RiskLevel = employee.RiskLevel
             };
         }
     }

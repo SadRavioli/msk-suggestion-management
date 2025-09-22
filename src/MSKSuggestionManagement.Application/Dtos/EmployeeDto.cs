@@ -9,7 +9,5 @@ namespace MSKSuggestionManagement.Application.Dtos
         public required string FullName { get; set; }
         public required string Department { get; set; }
         public required RiskLevel RiskLevel { get; set; }
-
-        public IEnumerable<Suggestion>? Suggestions { get; set; }
     }
 }

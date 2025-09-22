@@ -6,7 +6,7 @@ namespace MSKSuggestionManagement.Application.Mappers
     public static class SuggestionMapper
     {
         public static Suggestion ToEntity(this SuggestionDto dto)
-        {            
+        {
             return new Suggestion
             {
                 Id = dto.Id,
@@ -37,7 +37,7 @@ namespace MSKSuggestionManagement.Application.Mappers
                          suggestion.Employee.Name,
                          suggestion.Employee.Department,
                          suggestion.Employee.RiskLevel);
-                         
+
             return new SuggestionDto
             {
                 Id = suggestion.Id,
@@ -54,6 +54,27 @@ namespace MSKSuggestionManagement.Application.Mappers
                 DateUpdated = suggestion.DateUpdated,
                 CreatedBy = suggestion.CreatedBy,
                 DateCompleted = suggestion.DateCompleted
+            };
+        }
+        
+        public static SuggestionStatusDto ToStatusDto(this Suggestion suggestion)
+        {
+            return new SuggestionStatusDto
+            {
+                Id = suggestion.Id,
+                Status = suggestion.Status,
+                DateUpdated = suggestion.DateUpdated,
+                DateCompleted = suggestion.DateCompleted
+            };
+        }
+        
+        public static SuggestionNotesDto ToNotesDto(this Suggestion suggestion)
+        {                         
+            return new SuggestionNotesDto
+            {
+                Id = suggestion.Id,
+                Notes = suggestion.Notes ?? string.Empty,
+                DateUpdated = suggestion.DateUpdated
             };
         }
     }

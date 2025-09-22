@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using MSKSuggestionManagement.Application.Services;
 using MSKSuggestionManagement.Application.Dtos;
+using MSKSuggestionManagement.Application.Interfaces;
 
 namespace MSKSuggestionManagement.API.Controllers
 {
@@ -20,6 +20,17 @@ namespace MSKSuggestionManagement.API.Controllers
         {
             var employeeDtos = await _EmployeeService.GetEmployees();
             return Ok(employeeDtos);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EmployeeDto>> GetEmployeeById(Guid id)
+        {
+            var employee = await _EmployeeService.GetEmployeeById(id);
+
+            if (employee == null)
+                return NotFound($"Employee with id {id} not found");
+
+            return Ok(employee);
         }
 
         [HttpPost]

@@ -1,7 +1,6 @@
-using System.Reflection.Metadata.Ecma335;
 using MSKSuggestionManagement.Application.Dtos;
+using MSKSuggestionManagement.Application.Interfaces;
 using MSKSuggestionManagement.Application.Mappers;
-using MSKSuggestionManagement.Domain.Entities;
 using MSKSuggestionManagement.Domain.Interfaces;
 
 namespace MSKSuggestionManagement.Application.Services
@@ -14,6 +13,12 @@ namespace MSKSuggestionManagement.Application.Services
         {
             var employees = await _EmployeeRepo.GetEmployees();
             return employees.Select(e => e.ToDto());
+        }
+
+        public async Task<EmployeeDto?> GetEmployeeById(Guid id)
+        {
+            var employee = await _EmployeeRepo.GetEmployeeById(id);
+            return employee?.ToDto();
         }
 
         public async Task<EmployeeDto> AddEmployee(EmployeeDto dto)

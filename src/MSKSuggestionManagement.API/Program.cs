@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using MSKSuggestionManagement.Application.Interfaces;
 using MSKSuggestionManagement.Application.Services;
 using MSKSuggestionManagement.Domain.Interfaces;
 using MSKSuggestionManagement.Infrastructure.Data;
