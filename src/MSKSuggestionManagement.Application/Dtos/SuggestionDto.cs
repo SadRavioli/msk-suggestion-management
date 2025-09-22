@@ -4,8 +4,10 @@ namespace MSKSuggestionManagement.Application.Dtos;
 
 public class SuggestionDto
 {
-    public int Id { get; set; }
-    public int EmployeeId { get; set; }
+    public Guid Id { get; set; }
+    public Guid EmployeeId { get; set; }
+    public required EmployeeDto Employee { get; set; }
+    public string EmployeeDetails { get; set; } = string.Empty;
     public SuggestionType Type { get; set; }
     public required string Description { get; set; }
     public SuggestionStatus Status { get; set; }

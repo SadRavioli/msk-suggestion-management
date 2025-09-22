@@ -5,7 +5,6 @@ namespace MSKSuggestionManagement.Domain.Enums
         Pending,
         In_Progress,
         Completed,
-        Dismissed,
         Overdue
     }
 }

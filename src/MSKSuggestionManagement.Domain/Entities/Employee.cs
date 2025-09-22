@@ -9,6 +9,6 @@ namespace MSKSuggestionManagement.Domain.Entities
         public string Department { get; set; } = string.Empty;
         public RiskLevel RiskLevel { get; set; } = RiskLevel.Low;
 
-        public IEnumerable<Suggestion> Suggestions { get; set; } = [];
+        public ICollection<Suggestion> Suggestions { get; set; } = [];
     }
 }

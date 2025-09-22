@@ -1,33 +1,54 @@
 <template>
   <div id="app" class="container">
     <h1>MSK Suggestion Management</h1>
-    <div v-if="loading">Loading employees...</div>
-    <div v-else-if="error">Error: {{ error }}</div>
+    
+    <div v-if="loadingSuggestions">Loading employees...</div>
+    <div v-else-if="errorSuggestions">Error: {{ errorSuggestions }}</div>
+    <SuggestionTable v-else :suggestions="suggestions" />
+
+    <div v-if="loadingEmployees">Loading employees...</div>
+    <div v-else-if="errorEmployees">Error: {{ errorEmployees }}</div>
     <EmployeeTable v-else :employees="employees" />
   </div>
 </template>
 
 <script>
 import 'bootstrap';
-import { employeeService } from './services/apiService.js'
+import { employeeService, suggestionService } from './services/apiService.js'
 import EmployeeTable from './components/EmployeeTable.vue'
+import SuggestionTable from './components/SuggestionTable.vue';
 
 export default {
   name: 'App',
   components: {
+    SuggestionTable,
     EmployeeTable
   },
   data() {
     return {
+      suggestions: [],
+      loadingSuggestions: false,
+      errorSuggestions: null,
       employees: [],
-      loading: false,
-      error: null
+      loadingEmployees: false,
+      errorEmployees: null
     }
   },
-  async mounted() {
+  async mounted() {    
+    await this.fetchSuggestions(),
     await this.fetchEmployees()
   },
   methods: {
+    async fetchSuggestions() {
+      this.loading = true
+      try {
+        this.suggestions = await suggestionService.getSuggestions()
+      } catch (error) {
+        this.errorSuggestions = error.message
+      } finally {
+        this.loadingSuggestions = false
+      }
+    },
     async fetchEmployees() {
       this.loading = true
       try {

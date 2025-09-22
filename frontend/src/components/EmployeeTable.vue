@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         <tr v-for="employee in employees" :key="employee.id">
-          <td scope="row">{{ employee.name }}</td>
+          <td scope="row">{{ employee.fullName }}</td>
           <td>{{ employee.department }}</td>
           <td>
             <span :class="getRiskClass(employee.riskLevel)">

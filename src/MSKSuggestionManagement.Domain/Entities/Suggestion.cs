@@ -6,7 +6,7 @@ namespace MSKSuggestionManagement.Domain.Entities
     {
         public Guid Id { get; set; }
         public Guid EmployeeId { get; set; }
-        public string Type { get; set; } = string.Empty;
+        public SuggestionType Type { get; set; }
         public string Description { get; set; } = string.Empty;
         public SuggestionStatus Status { get; set; } = SuggestionStatus.Pending;
         public Priority Priority { get; set; } = Priority.Low; 
