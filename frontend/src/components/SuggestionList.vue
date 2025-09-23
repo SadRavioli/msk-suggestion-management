@@ -156,33 +156,42 @@ export default {
   data() {
     return {
       expandedIds: new Set(),
-      localSuggestions: this.suggestions,
+      localSuggestions: [], 
       statuses: ['Pending', 'In_Progress', 'Completed', 'Overdue']
+    }
+  },
+  watch: {
+    suggestions: {
+      handler(newSuggestions) {
+        this.localSuggestions = JSON.parse(JSON.stringify(newSuggestions));
+      },
+      immediate: true,
+      deep: true
     }
   },
   methods: {
     getRiskClass(riskLevel) {
-        riskLevel = riskLevel.toLowerCase();
+      const risk = riskLevel?.toLowerCase();
       return {
-        'text-danger': riskLevel === 'high',
-        'text-warning': riskLevel === 'medium',
-        'text-success': riskLevel === 'low'
+        'text-danger': risk === 'high',
+        'text-warning': risk === 'medium',
+        'text-success': risk === 'low'
       }
     },
     getStatusClass(status) {
-        status = status.toLowerCase();
+      const s = status?.toLowerCase().replace(/\s/g, '_');
       return {
-        'bg-secondary': status === 'pending',
-        'bg-warning': status === 'in_progress',
-        'bg-success': status === 'completed',
-        'bg-danger': status === 'overdue'
+        'bg-secondary': s === 'pending',
+        'bg-warning': s === 'in_progress',
+        'bg-success': s === 'completed',
+        'bg-danger': s === 'overdue'
       }
     },
     getPriorityClass(priority) {
       const p = priority?.toLowerCase();
       return {
         'text-danger': p === 'high',
-        'text-warning': p === 'medium', 
+        'text-warning': p === 'medium',
         'text-secondary': p === 'low'
       }
     },
@@ -195,12 +204,20 @@ export default {
       } else {
         this.expandedIds.add(id);
       }
-      // Force reactivity for Set changes
       this.$forceUpdate();
     },
     formatDate(dateString) {
       if (!dateString) return '-';
-        return new Date(dateString).toLocaleDateString();
+      return new Date(dateString).toLocaleDateString();
+    },
+    async handleStatusUpdate(suggestionId, newStatus) {
+      try {
+        await suggestionService.updateStatus(suggestionId, newStatus);
+        console.log(`Status of suggestion ${suggestionId} updated to ${newStatus}`);
+      } catch (error) {
+        console.error('Error updating status:', error);
+        alert('Failed to update status. Please try again.');
+      }
     }
   }
 }
