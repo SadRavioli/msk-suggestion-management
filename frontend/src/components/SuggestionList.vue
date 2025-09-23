@@ -98,7 +98,7 @@
             <td>{{ suggestion.type }}</td>
             <td>{{ suggestion.description }}</td>
             <td>
-              <span :class="getStatusClass(suggestion.status)">
+              <span :class="getStatusClass(suggestion.status)" class="badge">
                 {{ suggestion.status }}
               </span>
             </td>
@@ -111,19 +111,19 @@
               <span class="badge bg-info">{{ suggestion.source }}</span>
             </td>
             <td>
-              <small>{{ suggestion.notes || '-' }}</small>
+              {{ suggestion.notes || '-' }}
             </td>
             <td>
-              <small>{{ formatDate(suggestion.dateCreated) }}</small>
+              {{ formatDate(suggestion.dateCreated) }}
             </td>
             <td>
-              <small>{{ formatDate(suggestion.dateUpdated) }}</small>
+              {{ formatDate(suggestion.dateUpdated) }}
             </td>
             <td>
-              <small>{{ suggestion.createdBy || '-' }}</small>
+              {{ suggestion.createdBy || '-' }}
             </td>
             <td>
-              <small>{{ suggestion.dateCompleted ? formatDate(suggestion.dateCompleted) : '-' }}</small>
+              {{ suggestion.dateCompleted ? formatDate(suggestion.dateCompleted) : '-' }}
             </td>
           </tr>
         </tbody>
@@ -158,10 +158,10 @@ export default {
     getStatusClass(status) {
         status = status.toLowerCase();
       return {
-        'text-secondary': status === 'pending',
-        'text-warning': status === 'in_progress',
-        'text-success': status === 'completed',
-        'text-danger': status === 'overdue'
+        'bg-secondary': status === 'pending',
+        'bg-warning': status === 'in_progress',
+        'bg-success': status === 'completed',
+        'bg-danger': status === 'overdue'
       }
     },
     getPriorityClass(priority) {
@@ -173,20 +173,20 @@ export default {
       }
     },
     isExpanded(id) {
-    return this.expandedIds.has(id);
-  },
-  toggleExpanded(id) {
-    if (this.expandedIds.has(id)) {
-      this.expandedIds.delete(id);
-    } else {
-      this.expandedIds.add(id);
-    }
-    // Force reactivity for Set changes
-    this.$forceUpdate();
-  },
-  formatDate(dateString) {
-    if (!dateString) return '-';
-      return new Date(dateString).toLocaleDateString();
+      return this.expandedIds.has(id);
+    },
+    toggleExpanded(id) {
+      if (this.expandedIds.has(id)) {
+        this.expandedIds.delete(id);
+      } else {
+        this.expandedIds.add(id);
+      }
+      // Force reactivity for Set changes
+      this.$forceUpdate();
+    },
+    formatDate(dateString) {
+      if (!dateString) return '-';
+        return new Date(dateString).toLocaleDateString();
     }
   }
 }
