@@ -1,10 +1,13 @@
 <template>
   <div id="app" class="container">
     <h1>MSK Suggestion Management</h1>
-    
+
     <div v-if="loadingSuggestions">Loading suggestions...</div>
     <div v-else-if="errorSuggestions">Error: {{ errorSuggestions }}</div>
-    <SuggestionList v-else :suggestions="suggestions" />
+    <div v-else>
+      <FilterControls @filtersChanged="handleFiltersChanged" />
+      <SuggestionList :suggestions="suggestions" :filters="currentFilters" />
+    </div>
 
     <FloatActionButton @click="showCreateModal = true"></FloatActionButton>
 
@@ -25,6 +28,7 @@ import EmployeeTable from './components/EmployeeTable.vue';
 import SuggestionList from './components/SuggestionList.vue';
 import FloatActionButton from './components/FloatActionButton.vue';
 import CreateSuggestionModal from './components/CreateSuggestionModal.vue';
+import FilterControls from './components/FilterControls.vue';
 
 export default {
   name: 'App',
@@ -32,7 +36,8 @@ export default {
     SuggestionList,
     FloatActionButton,
     CreateSuggestionModal,
-    EmployeeTable
+    EmployeeTable,
+    FilterControls
   },
   data() {
     return {
@@ -42,7 +47,11 @@ export default {
       showCreateModal: false,
       employees: [],
       loadingEmployees: false,
-      errorEmployees: null
+      errorEmployees: null,
+      currentFilters: {
+        searchText: '',
+        status: ''
+      }
     }
   },
   async mounted() {    
@@ -73,6 +82,9 @@ export default {
     async handleSuggestionCreated() {
       this.showCreateModal = false
       await this.fetchSuggestions() // Refresh the list
+    },
+    handleFiltersChanged(newFilters) {
+      this.currentFilters = { ...newFilters };
     }
   }
 }

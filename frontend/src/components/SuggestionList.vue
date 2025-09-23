@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h2>Suggestions ({{ suggestions.length }})</h2>
+    <h2>Suggestions ({{ filteredSuggestions.length }} of {{ suggestions.length }})</h2>
 
     <!-- Mobile: Cards -->
     <div class="d-block d-md-none">
-      <div v-for="suggestion in localSuggestions" :key="suggestion.id" class="card mb-4 shadow-sm border-0">
+      <div v-for="suggestion in filteredSuggestions" :key="suggestion.id" class="card mb-4 shadow-sm border-0">
         <div class="card-body p-4">
           <!-- Header: Employee + Status -->
           <div class="d-flex justify-content-between align-items-start mb-3">
@@ -93,7 +93,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="suggestion in localSuggestions" :key="suggestion.id">
+          <tr v-for="suggestion in filteredSuggestions" :key="suggestion.id">
             <td scope="row">
               {{ suggestion.employee?.fullName }} <br/>
               {{ suggestion.employee?.department }} <br/>
@@ -153,22 +153,40 @@ export default {
     suggestions: {
       type: Array,
       required: true
+    },
+    filters: {
+      type: Object,
+      default: () => ({
+        searchText: '',
+        status: ''
+      })
     }
   },
   data() {
     return {
       expandedIds: new Set(),
-      localSuggestions: [], 
       statuses: ['Pending', 'In_Progress', 'Completed', 'Overdue']
     }
   },
-  watch: {
-    suggestions: {
-      handler(newSuggestions) {
-        this.localSuggestions = JSON.parse(JSON.stringify(newSuggestions));
-      },
-      immediate: true,
-      deep: true
+  computed: {
+    filteredSuggestions() {
+      let filtered = [...this.suggestions];
+
+      if (this.filters.searchText) {
+        const searchLower = this.filters.searchText.toLowerCase();
+        filtered = filtered.filter(suggestion =>
+          suggestion.description?.toLowerCase().includes(searchLower) ||
+          suggestion.employee?.fullName?.toLowerCase().includes(searchLower)
+        );
+      }
+
+      if (this.filters.status) {
+        filtered = filtered.filter(suggestion =>
+          suggestion.status === this.filters.status
+        );
+      }
+
+      return filtered;
     }
   },
   methods: {
