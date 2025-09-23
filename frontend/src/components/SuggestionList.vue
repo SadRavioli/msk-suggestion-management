@@ -16,12 +16,12 @@
               </span>
             </div>
             <select
-              class="form-select form-select-sm w-auto"
+              class="form-select form-select-sm w-auto status-dropdown"
               :class="getStatusClass(suggestion.status)"
               v-model="suggestion.status"
               @change="handleStatusUpdate(suggestion.id, $event.target.value)">
               <option v-for="status in statuses" :key="status" :value="status">
-                {{ status }}
+                {{ status.replace('_', ' ') }}
               </option>
             </select>
           </div>
@@ -105,12 +105,12 @@
             <td>{{ suggestion.description }}</td>
             <td>
               <select
-                class="form-select form-select-sm"
+                class="form-select form-select-sm status-dropdown"
                 :class="getStatusClass(suggestion.status)"
                 v-model="suggestion.status"
                 @change="handleStatusUpdate(suggestion.id, $event.target.value)">
                 <option v-for="status in statuses" :key="status" :value="status">
-                  {{ status }}
+                  {{ status.replace('_', ' ') }}
                 </option>
               </select>
             </td>
@@ -145,6 +145,8 @@
 </template>
 
 <script>
+import { suggestionService } from '@/services/apiService';
+
 export default {
   name: 'SuggestionList',
   props: {
@@ -179,7 +181,7 @@ export default {
       }
     },
     getStatusClass(status) {
-      const s = status?.toLowerCase().replace(/\s/g, '_');
+      const s = status?.toLowerCase();
       return {
         'bg-secondary': s === 'pending',
         'bg-warning': s === 'in_progress',
@@ -224,6 +226,13 @@ export default {
 </script>
 
 <style scoped>
+.status-dropdown {
+  min-width: 130px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
 .card:hover {
   transform: translateY(-2px);
   transition: transform 0.2s ease;
