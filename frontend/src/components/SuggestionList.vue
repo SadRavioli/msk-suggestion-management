@@ -4,7 +4,7 @@
 
     <!-- Mobile: Cards -->
     <div class="d-block d-md-none">
-      <div v-for="suggestion in suggestions" :key="suggestion.id" class="card mb-4 shadow-sm border-0">
+      <div v-for="suggestion in localSuggestions" :key="suggestion.id" class="card mb-4 shadow-sm border-0">
         <div class="card-body p-4">
           <!-- Header: Employee + Status -->
           <div class="d-flex justify-content-between align-items-start mb-3">
@@ -15,9 +15,15 @@
                 {{ suggestion.employee?.riskLevel }} Risk
               </span>
             </div>
-            <span :class="getStatusClass(suggestion.status)" class="badge rounded-pill fs-6">
-              {{ suggestion.status }}
-            </span>
+            <select
+              class="form-select form-select-sm w-auto"
+              :class="getStatusClass(suggestion.status)"
+              v-model="suggestion.status"
+              @change="handleStatusUpdate(suggestion.id, $event.target.value)">
+              <option v-for="status in statuses" :key="status" :value="status">
+                {{ status }}
+              </option>
+            </select>
           </div>
 
           <!-- Description -->
@@ -87,7 +93,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="suggestion in suggestions" :key="suggestion.id">
+          <tr v-for="suggestion in localSuggestions" :key="suggestion.id">
             <td scope="row">
               {{ suggestion.employee?.fullName }} <br/>
               {{ suggestion.employee?.department }} <br/>
@@ -98,9 +104,15 @@
             <td>{{ suggestion.type }}</td>
             <td>{{ suggestion.description }}</td>
             <td>
-              <span :class="getStatusClass(suggestion.status)" class="badge">
-                {{ suggestion.status }}
-              </span>
+              <select
+                class="form-select form-select-sm"
+                :class="getStatusClass(suggestion.status)"
+                v-model="suggestion.status"
+                @change="handleStatusUpdate(suggestion.id, $event.target.value)">
+                <option v-for="status in statuses" :key="status" :value="status">
+                  {{ status }}
+                </option>
+              </select>
             </td>
             <td>
               <span :class="getPriorityClass(suggestion.priority)" class="badge">
@@ -143,7 +155,9 @@ export default {
   },
   data() {
     return {
-      expandedIds: new Set()
+      expandedIds: new Set(),
+      localSuggestions: this.suggestions,
+      statuses: ['Pending', 'In_Progress', 'Completed', 'Overdue']
     }
   },
   methods: {
