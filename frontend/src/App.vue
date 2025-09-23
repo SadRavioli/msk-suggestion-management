@@ -2,9 +2,15 @@
   <div id="app" class="container">
     <h1>MSK Suggestion Management</h1>
     
-    <div v-if="loadingSuggestions">Loading employees...</div>
+    <div v-if="loadingSuggestions">Loading suggestions...</div>
     <div v-else-if="errorSuggestions">Error: {{ errorSuggestions }}</div>
-    <SuggestionTable v-else :suggestions="suggestions" />
+    <SuggestionList v-else :suggestions="suggestions" />
+
+    <FloatActionButton @click="showCreateModal = true"></FloatActionButton>
+
+    <CreateSuggestionModal :show="showCreateModal" 
+      @close="showCreateModal = false"
+      @created="handleSuggestionCreated" />
 
     <div v-if="loadingEmployees">Loading employees...</div>
     <div v-else-if="errorEmployees">Error: {{ errorEmployees }}</div>
@@ -14,14 +20,18 @@
 
 <script>
 import 'bootstrap';
-import { employeeService, suggestionService } from './services/apiService.js'
-import EmployeeTable from './components/EmployeeTable.vue'
-import SuggestionTable from './components/SuggestionTable.vue';
+import { employeeService, suggestionService } from './services/apiService.js';
+import EmployeeTable from './components/EmployeeTable.vue';
+import SuggestionList from './components/SuggestionList.vue';
+import FloatActionButton from './components/FloatActionButton.vue';
+import CreateSuggestionModal from './components/CreateSuggestionModal.vue';
 
 export default {
   name: 'App',
   components: {
-    SuggestionTable,
+    SuggestionList,
+    FloatActionButton,
+    CreateSuggestionModal,
     EmployeeTable
   },
   data() {
@@ -29,6 +39,7 @@ export default {
       suggestions: [],
       loadingSuggestions: false,
       errorSuggestions: null,
+      showCreateModal: false,
       employees: [],
       loadingEmployees: false,
       errorEmployees: null
@@ -58,6 +69,10 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+    async handleSuggestionCreated() {
+      this.showCreateModal = false
+      await this.fetchSuggestions() // Refresh the list
     }
   }
 }

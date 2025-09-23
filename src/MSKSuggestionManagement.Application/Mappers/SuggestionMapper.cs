@@ -1,5 +1,6 @@
 using MSKSuggestionManagement.Application.Dtos;
 using MSKSuggestionManagement.Domain.Entities;
+using MSKSuggestionManagement.Domain.Enums;
 
 namespace MSKSuggestionManagement.Application.Mappers
 {
@@ -28,6 +29,24 @@ namespace MSKSuggestionManagement.Application.Mappers
                 DateUpdated = dto.DateUpdated,
                 CreatedBy = dto.CreatedBy,
                 DateCompleted = dto.DateCompleted
+            };
+        }
+
+        public static Suggestion ToEntity(this AddSuggestionDto dto)
+        {
+            return new Suggestion
+            {
+                Id = Guid.NewGuid(),
+                EmployeeId = dto.EmployeeId,
+                Type = dto.Type,
+                Description = dto.Description,
+                Priority = dto.Priority,
+                Source = dto.Source,
+                Status = SuggestionStatus.Pending,
+                Notes = dto.Notes,
+                CreatedBy = dto.CreatedBy,
+                DateCreated = DateTime.UtcNow,
+                DateUpdated = DateTime.UtcNow
             };
         }
 

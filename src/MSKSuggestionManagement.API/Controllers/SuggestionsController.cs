@@ -34,7 +34,7 @@ namespace MSKSuggestionManagement.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SuggestionDto>> AddSuggestion(SuggestionDto dto)
+        public async Task<ActionResult<SuggestionDto>> AddSuggestion([FromBody] AddSuggestionDto dto)
         {
             var newSuggestionDto = await _SuggestionService.AddSuggestion(dto);
             return Ok(newSuggestionDto);

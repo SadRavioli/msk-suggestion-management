@@ -2,15 +2,11 @@
 
 namespace MSKSuggestionManagement.Application.Dtos;
 
-public class SuggestionDto
+public class AddSuggestionDto
 {
-    public Guid Id { get; set; }
     public Guid EmployeeId { get; set; }
-    public required EmployeeDto Employee { get; set; }
-    public string EmployeeDetails { get; set; } = string.Empty;
     public SuggestionType Type { get; set; }
     public required string Description { get; set; }
-    public SuggestionStatus Status { get; set; }
     public Priority Priority { get; set; }
     public SuggestionSource Source { get; set; }
     public string? Notes { get; set; }

@@ -20,5 +20,19 @@ export const suggestionService = {
   async getSuggestions() {
     const response = await apiClient.get('/suggestions')
     return response.data
+  },
+
+  async addSuggestion(suggestion) {
+    const response = await apiClient.post('/suggestions', suggestion)
+    return response.data
+  },
+
+  async updateStatus(suggestionId, status, notes = '') {
+    const response = await apiClient.patch(`/suggestions/${suggestionId}/status`, 
+      {
+        status,
+        notes
+      })
+    return response.data
   }
 }

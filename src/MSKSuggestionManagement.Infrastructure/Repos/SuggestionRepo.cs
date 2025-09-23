@@ -32,7 +32,9 @@ namespace MSKSuggestionManagement.Infrastructure.Repos
             _DbContext.Suggestions.Add(suggestion);
             await _DbContext.SaveChangesAsync();
 
-            return suggestion;
+            return await _DbContext.Suggestions
+                .Include(s => s.Employee)
+                .FirstAsync(s => s.Id == suggestion.Id);
         }
 
         public async Task<Suggestion> UpdateSuggestionStatus(Guid id, SuggestionStatus status)

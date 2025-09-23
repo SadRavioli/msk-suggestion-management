@@ -21,7 +21,7 @@ namespace MSKSuggestionManagement.Application.Services
             return suggestion?.ToDto();
         }
 
-        public async Task<SuggestionDto> AddSuggestion(SuggestionDto dto)
+        public async Task<SuggestionDto> AddSuggestion(AddSuggestionDto dto)
         {
             var suggestionEntity = dto.ToEntity();
             var savedEntity = await _SuggestionRepo.AddSuggestion(suggestionEntity);
