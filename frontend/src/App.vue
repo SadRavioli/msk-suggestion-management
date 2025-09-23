@@ -1,23 +1,44 @@
 <template>
-  <div id="app" class="container">
-    <h1>MSK Suggestion Management</h1>
+  <div id="app">
+    <header class="bg-primary text-white py-4 mb-4">
+      <div class="container">
+        <h1 class="mb-0">MSK Suggestion Management</h1>
+        <p class="mb-0 text-light">Manage employee office health and safety suggestions</p>
+      </div>
+    </header>
 
-    <div v-if="loadingSuggestions">Loading suggestions...</div>
-    <div v-else-if="errorSuggestions">Error: {{ errorSuggestions }}</div>
-    <div v-else>
-      <FilterControls @filtersChanged="handleFiltersChanged" />
-      <SuggestionList :suggestions="suggestions" :filters="currentFilters" />
-    </div>
+    <main class="container">
+      <div v-if="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading data...</p>
+      </div>
 
-    <FloatActionButton @click="showCreateModal = true"></FloatActionButton>
+      <div v-else-if="error" class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Error Loading Data</h4>
+        <p>{{ error }}</p>
+        <button class="btn btn-outline-danger" @click="retryLoad">Try Again</button>
+      </div>
 
-    <CreateSuggestionModal :show="showCreateModal" 
+      <div v-else>
+        <section class="section">
+          <FilterControls @filtersChanged="handleFiltersChanged" />
+          <SuggestionList :suggestions="suggestions" :filters="currentFilters" />
+        </section>
+
+        <section v-if="employees.length > 0" class="section mt-5">
+          <EmployeeTable :employees="employees" />
+        </section>
+      </div>
+    </main>
+
+    <FloatActionButton @click="showCreateModal = true" />
+
+    <CreateSuggestionModal
+      :show="showCreateModal"
       @close="showCreateModal = false"
       @created="handleSuggestionCreated" />
-
-    <div v-if="loadingEmployees">Loading employees...</div>
-    <div v-else-if="errorEmployees">Error: {{ errorEmployees }}</div>
-    <EmployeeTable v-else :employees="employees" />
   </div>
 </template>
 
@@ -42,60 +63,77 @@ export default {
   data() {
     return {
       suggestions: [],
-      loadingSuggestions: false,
-      errorSuggestions: null,
-      showCreateModal: false,
       employees: [],
-      loadingEmployees: false,
-      errorEmployees: null,
+      loading: false,
+      error: null,
+      showCreateModal: false,
       currentFilters: {
         searchText: '',
         status: ''
       }
     }
   },
-  async mounted() {    
-    await this.fetchSuggestions(),
-    await this.fetchEmployees()
+  async mounted() {
+    await this.loadData()
   },
   methods: {
-    async fetchSuggestions() {
+    async loadData() {
       this.loading = true
+      this.error = null
+
       try {
-        this.suggestions = await suggestionService.getSuggestions()
-      } catch (error) {
-        this.errorSuggestions = error.message
-      } finally {
-        this.loadingSuggestions = false
-      }
-    },
-    async fetchEmployees() {
-      this.loading = true
-      try {
-        this.employees = await employeeService.getEmployees()
+        const [suggestions, employees] = await Promise.all([
+          suggestionService.getSuggestions(),
+          employeeService.getEmployees()
+        ])
+
+        this.suggestions = suggestions
+        this.employees = employees
       } catch (error) {
         this.error = error.message
+        console.error('Error loading data:', error)
       } finally {
         this.loading = false
       }
     },
+    async retryLoad() {
+      await this.loadData()
+    },
     async handleSuggestionCreated() {
       this.showCreateModal = false
-      await this.fetchSuggestions() // Refresh the list
+
+      try {
+        this.suggestions = await suggestionService.getSuggestions()
+      } catch (error) {
+        console.error('Error refreshing suggestions:', error)
+      }
     },
     handleFiltersChanged(newFilters) {
-      this.currentFilters = { ...newFilters };
+      this.currentFilters = { ...newFilters }
     }
   }
 }
 </script>
 
 <style>
+body {
+  background-color: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+#app {
+  min-height: 100vh;
+}
 
 .container {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+}
+
+.section {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
 }
 </style>

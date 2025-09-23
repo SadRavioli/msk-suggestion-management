@@ -11,12 +11,12 @@
             <div class="employee-info">
               <h6 class="card-title mb-1 fw-bold text-dark">{{ suggestion.employee?.fullName }}</h6>
               <div class="text-muted small fw-medium">{{ suggestion.employee?.department }}</div>
-              <span :class="getRiskClass(suggestion.employee?.riskLevel)" class="badge rounded-pill mt-2">
+              <span :class="getRiskClass(suggestion.employee?.riskLevel)" class="badge">
                 {{ suggestion.employee?.riskLevel }} Risk
               </span>
             </div>
             <select
-              class="form-select form-select-sm w-auto status-dropdown"
+              class="form-select form-select-sm fw-bold border-0 w-50"
               :class="getStatusClass(suggestion.status)"
               v-model="suggestion.status"
               @change="handleStatusUpdate(suggestion.id, $event.target.value)">
@@ -97,7 +97,7 @@
             <td scope="row">
               {{ suggestion.employee?.fullName }} <br/>
               {{ suggestion.employee?.department }} <br/>
-              <span :class="getRiskClass(suggestion.employee?.riskLevel)">
+              <span :class="getRiskClass(suggestion.employee?.riskLevel)" class="badge">
                 {{ suggestion.employee?.riskLevel }} Risk
               </span>
             </td>
@@ -105,7 +105,8 @@
             <td>{{ suggestion.description }}</td>
             <td>
               <select
-                class="form-select form-select-sm status-dropdown"
+                class="form-select form-select-sm fw-bold border-0"
+                style="min-width: 130px;"
                 :class="getStatusClass(suggestion.status)"
                 v-model="suggestion.status"
                 @change="handleStatusUpdate(suggestion.id, $event.target.value)">
@@ -193,26 +194,26 @@ export default {
     getRiskClass(riskLevel) {
       const risk = riskLevel?.toLowerCase();
       return {
-        'text-danger': risk === 'high',
-        'text-warning': risk === 'medium',
-        'text-success': risk === 'low'
+        'bg-danger text-white': risk === 'high',
+        'bg-warning text-dark': risk === 'medium',
+        'bg-success text-white': risk === 'low'
       }
     },
     getStatusClass(status) {
       const s = status?.toLowerCase();
       return {
-        'bg-secondary': s === 'pending',
-        'bg-warning': s === 'in_progress',
-        'bg-success': s === 'completed',
-        'bg-danger': s === 'overdue'
+        'bg-secondary text-white': s === 'pending',
+        'bg-warning text-dark': s === 'in_progress',
+        'bg-success text-white': s === 'completed',
+        'bg-danger text-white': s === 'overdue'
       }
     },
     getPriorityClass(priority) {
       const p = priority?.toLowerCase();
       return {
-        'text-danger': p === 'high',
-        'text-warning': p === 'medium',
-        'text-secondary': p === 'low'
+        'bg-danger text-white': p === 'high',
+        'bg-warning text-dark': p === 'medium',
+        'bg-success text-white': p === 'low'
       }
     },
     isExpanded(id) {
@@ -244,13 +245,6 @@ export default {
 </script>
 
 <style scoped>
-.status-dropdown {
-  min-width: 130px;
-  font-weight: 600;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  transition: all 0.2s ease;
-}
 .card:hover {
   transform: translateY(-2px);
   transition: transform 0.2s ease;
