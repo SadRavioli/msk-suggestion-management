@@ -189,7 +189,8 @@ export default {
       type: Object,
       default: () => ({
         searchText: '',
-        status: ''
+        status: '',
+        riskLevel: ''
       })
     }
   },
@@ -216,6 +217,12 @@ export default {
       if (this.filters.status) {
         filtered = filtered.filter(suggestion =>
           suggestion.status === this.filters.status
+        );
+      }
+
+      if (this.filters.riskLevel) {
+        filtered = filtered.filter(suggestion =>
+          suggestion.employee?.riskLevel === this.filters.riskLevel
         );
       }
 

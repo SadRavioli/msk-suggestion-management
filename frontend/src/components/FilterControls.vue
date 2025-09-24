@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3">
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-6">
         <label class="form-label">Search</label>
         <input
           type="text"
@@ -10,7 +10,7 @@
           v-model="searchText"
           @input="updateFilters">
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <label class="form-label">Status</label>
         <select class="form-select" v-model="selectedStatus" @change="updateFilters">
           <option value="">All Statuses</option>
@@ -18,6 +18,15 @@
           <option value="In_Progress">In Progress</option>
           <option value="Completed">Completed</option>
           <option value="Overdue">Overdue</option>
+        </select>        
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Risk Level</label>
+        <select class="form-select" v-model="selectedRisk" @change="updateFilters">
+          <option value="">All Levels</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
         </select>
       </div>
     </div>
@@ -30,14 +39,16 @@ export default {
   data() {
     return {
       searchText: '',
-      selectedStatus: ''
+      selectedStatus: '',
+      selectedRisk: ''
     }
   },
   methods: {
     updateFilters() {
       this.$emit('filtersChanged', {
         searchText: this.searchText,
-        status: this.selectedStatus
+        status: this.selectedStatus,
+        riskLevel: this.selectedRisk
       });
     }
   }
