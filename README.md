@@ -18,7 +18,7 @@ A full-stack web application for managing employee office health and safety sugg
    dotnet restore
    dotnet run
    ```
-   API will be available at `https://localhost:7143`
+   Swagger UI available at `http://localhost:5246/swagger/` or `https://localhost:7241/swagger` in development
 
 2. **Start the Frontend** (separate terminal)
    ```bash
@@ -75,7 +75,3 @@ frontend/src/
 - **Mobile/Tablet**: Card layout optimized for touch interaction and limited screen space
 - **Desktop**: Table layout for information density and data scanning
 - **Breakpoint**: 1200px chosen specifically to accommodate 11-column table without horizontal scroll
-
-## Additional Information
-
-**API Documentation**: Swagger UI available at `http://localhost:5246/swagger/` or `https://localhost:7241/swagger` in development
