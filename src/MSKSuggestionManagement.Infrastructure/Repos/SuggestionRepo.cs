@@ -49,7 +49,7 @@ namespace MSKSuggestionManagement.Infrastructure.Repos
             if (status == SuggestionStatus.Completed)
                 suggestion.DateCompleted = DateTime.UtcNow;
 
-            var save = await _DbContext.SaveChangesAsync();
+            await _DbContext.SaveChangesAsync();
             return suggestion;
         }
 
@@ -62,7 +62,7 @@ namespace MSKSuggestionManagement.Infrastructure.Repos
             suggestion.Notes = notes;
             suggestion.DateUpdated = DateTime.UtcNow;
 
-            var save = await _DbContext.SaveChangesAsync();
+            await _DbContext.SaveChangesAsync();
             return suggestion;
         }
     }

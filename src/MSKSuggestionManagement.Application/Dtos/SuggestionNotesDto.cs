@@ -1,6 +1,4 @@
-﻿using MSKSuggestionManagement.Domain.Enums;
-
-namespace MSKSuggestionManagement.Application.Dtos;
+﻿namespace MSKSuggestionManagement.Application.Dtos;
 
 public class SuggestionNotesDto
 {

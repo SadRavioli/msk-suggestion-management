@@ -1,5 +1,4 @@
-﻿using MSKSuggestionManagement.Domain.Entities;
-using MSKSuggestionManagement.Domain.Enums;
+﻿using MSKSuggestionManagement.Domain.Enums;
 
 namespace MSKSuggestionManagement.Application.Dtos
 {
