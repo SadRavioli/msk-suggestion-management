@@ -2,8 +2,13 @@
   <div id="app">
     <header class="bg-primary text-white py-4 mb-4">
       <div class="container">
-        <h1 class="mb-0">MSK Suggestion Management</h1>
-        <p class="mb-0 text-light">Manage employee office health and safety suggestions</p>
+        <div class="d-flex align-items-center">
+          <img src="/favicon.png" alt="Logo" class="me-3" style="height: 48px; width: 48px;">
+          <div>
+            <h1 class="mb-0">MSK Suggestion Management</h1>
+            <p class="mb-0 text-light">Manage employee office health and safety suggestions</p>
+          </div>
+        </div>
       </div>
     </header>
 
