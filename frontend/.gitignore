@@ -16,7 +16,7 @@ obj/
 *.user
 *.suo
 
-# Node modules (for Vue.js later)
+# Node modules
 node_modules/
 dist/
 
