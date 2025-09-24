@@ -51,9 +51,24 @@
                   <small class="text-muted fw-bold text-uppercase">Created</small>
                   <div class="small text-dark">{{ formatDate(suggestion.dateCreated) }}</div>
                 </div>
-                <div class="col-12" v-if="suggestion.notes">
+                <div class="col-12">
                   <small class="text-muted fw-bold text-uppercase">Notes</small>
-                  <div class="small text-dark">{{ suggestion.notes }}</div>
+                  <div v-if="!isEditingNotes(suggestion.id)" @click="startEditingNotes(suggestion.id)" class="small text-dark notes-display">
+                    {{ suggestion.notes || '[Click to edit]' }}
+                  </div>
+                  <div v-else class="notes-edit">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm mt-1"
+                      v-model="editingNotesValues[suggestion.id]"
+                      @keyup.enter="saveNotes(suggestion.id)"
+                      @keyup.escape="cancelEditingNotes(suggestion.id)"
+                      ref="notesInput">
+                    <div class="mt-2">
+                      <button class="btn btn-sm btn-success me-1" @click="saveNotes(suggestion.id)">Save</button>
+                      <button class="btn btn-sm btn-secondary" @click="cancelEditingNotes(suggestion.id)">Cancel</button>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-12" v-if="suggestion.createdBy">
                   <small class="text-muted fw-bold text-uppercase">Created By</small>
@@ -124,7 +139,22 @@
               <span class="badge bg-info">{{ suggestion.source }}</span>
             </td>
             <td>
-              {{ suggestion.notes || '-' }}
+              <div v-if="!isEditingNotes(suggestion.id)" @click="startEditingNotes(suggestion.id)" class="notes-display">
+                {{ suggestion.notes || '[Click to edit]' }}
+              </div>
+              <div v-else class="notes-edit">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  v-model="editingNotesValues[suggestion.id]"
+                  @keyup.enter="saveNotes(suggestion.id)"
+                  @keyup.escape="cancelEditingNotes(suggestion.id)"
+                  ref="notesInput">
+                <div class="mt-1">
+                  <button class="btn btn-sm btn-success me-1" @click="saveNotes(suggestion.id)">Save</button>
+                  <button class="btn btn-sm btn-secondary" @click="cancelEditingNotes(suggestion.id)">Cancel</button>
+                </div>
+              </div>
             </td>
             <td>
               {{ formatDate(suggestion.dateCreated) }}
@@ -166,6 +196,8 @@ export default {
   data() {
     return {
       expandedIds: new Set(),
+      editingNotes: new Set(),
+      editingNotesValues: {},
       statuses: ['Pending', 'In_Progress', 'Completed', 'Overdue']
     }
   },
@@ -239,6 +271,48 @@ export default {
         console.error('Error updating status:', error);
         alert('Failed to update status. Please try again.');
       }
+    },
+    isEditingNotes(id) {
+      return this.editingNotes.has(id);
+    },
+    startEditingNotes(id) {
+      const suggestion = this.suggestions.find(s => s.id === id);
+      this.editingNotesValues[id] = suggestion?.notes || '';
+      this.editingNotes.add(id);
+      this.$forceUpdate();
+
+      this.$nextTick(() => {
+        const inputs = this.$refs.notesInput;
+        if (inputs) {
+          const input = Array.isArray(inputs) ? inputs.find(inp => inp) : inputs;
+          if (input) input.focus();
+        }
+      });
+    },
+    cancelEditingNotes(id) {
+      this.editingNotes.delete(id);
+      delete this.editingNotesValues[id];
+      this.$forceUpdate();
+    },
+    async saveNotes(id) {
+      try {
+        const newNotes = this.editingNotesValues[id];
+        await suggestionService.updateNotes(id, newNotes);
+
+        const suggestion = this.suggestions.find(s => s.id === id);
+        if (suggestion) {
+          suggestion.notes = newNotes;
+        }
+
+        this.editingNotes.delete(id);
+        delete this.editingNotesValues[id];
+        this.$forceUpdate();
+
+        console.log(`Notes updated for suggestion ${id}`);
+      } catch (error) {
+        console.error('Error updating notes:', error);
+        alert('Failed to update notes. Please try again.');
+      }
     }
   }
 }
@@ -248,5 +322,25 @@ export default {
 .card:hover {
   transform: translateY(-2px);
   transition: transform 0.2s ease;
+}
+
+.notes-display {
+  cursor: pointer;
+  padding: 4px;
+  border: 1px dashed #ccc;
+}
+
+.notes-display:hover {
+  background-color: #f0f0f0;
+}
+
+.form-select {
+  cursor: pointer;
+}
+
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+  box-shadow: none;
 }
 </style>

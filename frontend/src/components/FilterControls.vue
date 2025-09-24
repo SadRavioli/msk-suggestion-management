@@ -44,3 +44,11 @@ export default {
 }
 </script>
 
+<style scoped>
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+  box-shadow: none;
+}
+</style>
+

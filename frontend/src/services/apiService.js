@@ -28,10 +28,18 @@ export const suggestionService = {
   },
 
   async updateStatus(suggestionId, status) {
-    const response = await apiClient.patch(`/suggestions/${suggestionId}/status`, 
+    const response = await apiClient.patch(`/suggestions/${suggestionId}/status`,
       {
         suggestionId,
         status
+      })
+    return response.data
+  },
+
+  async updateNotes(suggestionId, notes) {
+    const response = await apiClient.patch(`/suggestions/${suggestionId}/notes`,
+      {
+        notes
       })
     return response.data
   }
