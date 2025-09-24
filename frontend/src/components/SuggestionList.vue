@@ -2,16 +2,16 @@
   <div>
     <h2>Suggestions ({{ filteredSuggestions.length }} of {{ suggestions.length }})</h2>
 
-    <!-- Mobile: Cards -->
-    <div class="d-block d-md-none">
+    <!-- Mobile & Tablet: Cards -->
+    <div class="d-block d-xl-none">
       <div v-for="suggestion in filteredSuggestions" :key="suggestion.id" class="card mb-4 shadow-sm border-0">
         <div class="card-body p-4">
           <!-- Header: Employee + Status -->
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div class="employee-info">
-              <h6 class="card-title mb-1 fw-bold text-dark">{{ suggestion.employee?.fullName }}</h6>
+              <h3 class="card-title mb-1 fw-bold text-dark h6">{{ suggestion.employee?.fullName }}</h3>
               <div class="text-muted small fw-medium">{{ suggestion.employee?.department }}</div>
-              <span :class="getRiskClass(suggestion.employee?.riskLevel)" class="badge">
+              <span :class="getRiskClass(suggestion.employee?.riskLevel)" class="badge" :aria-label="`${suggestion.employee?.riskLevel} risk level`">
                 {{ suggestion.employee?.riskLevel }} Risk
               </span>
             </div>
@@ -19,7 +19,8 @@
               class="form-select form-select-sm fw-bold border-0 w-50"
               :class="getStatusClass(suggestion.status)"
               v-model="suggestion.status"
-              @change="handleStatusUpdate(suggestion.id, $event.target.value)">
+              @change="handleStatusUpdate(suggestion.id, $event.target.value)"
+              :aria-label="`Status for ${suggestion.employee?.fullName}'s suggestion`">
               <option v-for="status in statuses" :key="status" :value="status">
                 {{ status.replace('_', ' ') }}
               </option>
@@ -27,14 +28,14 @@
           </div>
 
           <!-- Description -->
-          <div class="bg-light p-3 rounded-3 mb-3 border-start border-primary border-4">
+          <div class="bg-light p-3 rounded-3 mb-3 border-start border-4">
             <p class="mb-0 text-dark fw-medium">{{ suggestion.description }}</p>
           </div>
 
           <!-- Type + Priority Row -->
           <div class="d-flex justify-content-between mb-3">
             <span class="badge bg-secondary rounded-pill px-3 py-2">{{ suggestion.type }}</span>
-            <span :class="getPriorityClass(suggestion.priority)" class="badge rounded-pill px-3 py-2">
+            <span :class="getPriorityClass(suggestion.priority)" class="badge rounded-pill px-3 py-2" :aria-label="`${suggestion.priority} priority`">
               {{ suggestion.priority }}
             </span>
           </div>
@@ -53,7 +54,7 @@
                 </div>
                 <div class="col-12">
                   <small class="text-muted fw-bold text-uppercase">Notes</small>
-                  <div v-if="!isEditingNotes(suggestion.id)" @click="startEditingNotes(suggestion.id)" class="small text-dark notes-display">
+                  <div v-if="!isEditingNotes(suggestion.id)" @click="startEditingNotes(suggestion.id)" class="small text-dark notes-display" role="button" tabindex="0" @keydown.enter="startEditingNotes(suggestion.id)" @keydown.space.prevent="startEditingNotes(suggestion.id)" :aria-label="`Edit notes: ${suggestion.notes || 'No notes yet'}`">
                     {{ suggestion.notes || '[Click to edit]' }}
                   </div>
                   <div v-else class="notes-edit">
@@ -63,7 +64,9 @@
                       v-model="editingNotesValues[suggestion.id]"
                       @keyup.enter="saveNotes(suggestion.id)"
                       @keyup.escape="cancelEditingNotes(suggestion.id)"
-                      ref="notesInput">
+                      ref="notesInput"
+                      :aria-label="`Edit notes for ${suggestion.employee?.fullName}'s suggestion`"
+                      placeholder="Enter notes...">
                     <div class="mt-2">
                       <button class="btn btn-sm btn-success me-1" @click="saveNotes(suggestion.id)">Save</button>
                       <button class="btn btn-sm btn-secondary" @click="cancelEditingNotes(suggestion.id)">Cancel</button>
@@ -89,9 +92,10 @@
       </div>
     </div>
 
-    <!-- Desktop Table -->
-    <div class="d-none d-md-block">
-      <table class="table table-striped table-hover">
+    <!-- Desktop Table (1200px+) -->
+    <div class="d-none d-xl-block">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
         <thead>
           <tr>
             <th scope="col">Employee Details</th>
@@ -112,7 +116,7 @@
             <td scope="row">
               {{ suggestion.employee?.fullName }} <br/>
               {{ suggestion.employee?.department }} <br/>
-              <span :class="getRiskClass(suggestion.employee?.riskLevel)" class="badge">
+              <span :class="getRiskClass(suggestion.employee?.riskLevel)" class="badge" :aria-label="`${suggestion.employee?.riskLevel} risk level`">
                 {{ suggestion.employee?.riskLevel }} Risk
               </span>
             </td>
@@ -124,14 +128,15 @@
                 style="min-width: 130px;"
                 :class="getStatusClass(suggestion.status)"
                 v-model="suggestion.status"
-                @change="handleStatusUpdate(suggestion.id, $event.target.value)">
+                @change="handleStatusUpdate(suggestion.id, $event.target.value)"
+                :aria-label="`Status for ${suggestion.employee?.fullName}'s suggestion`">
                 <option v-for="status in statuses" :key="status" :value="status">
                   {{ status.replace('_', ' ') }}
                 </option>
               </select>
             </td>
             <td>
-              <span :class="getPriorityClass(suggestion.priority)" class="badge">
+              <span :class="getPriorityClass(suggestion.priority)" class="badge" :aria-label="`${suggestion.priority} priority`">
                 {{ suggestion.priority }}
               </span>
             </td>
@@ -139,7 +144,7 @@
               <span class="badge bg-info">{{ suggestion.source }}</span>
             </td>
             <td>
-              <div v-if="!isEditingNotes(suggestion.id)" @click="startEditingNotes(suggestion.id)" class="notes-display">
+              <div v-if="!isEditingNotes(suggestion.id)" @click="startEditingNotes(suggestion.id)" class="notes-display" role="button" tabindex="0" @keydown.enter="startEditingNotes(suggestion.id)" @keydown.space.prevent="startEditingNotes(suggestion.id)" :aria-label="`Edit notes: ${suggestion.notes || 'No notes yet'}`">
                 {{ suggestion.notes || '[Click to edit]' }}
               </div>
               <div v-else class="notes-edit">
@@ -149,7 +154,9 @@
                   v-model="editingNotesValues[suggestion.id]"
                   @keyup.enter="saveNotes(suggestion.id)"
                   @keyup.escape="cancelEditingNotes(suggestion.id)"
-                  ref="notesInput">
+                  ref="notesInput"
+                  :aria-label="`Edit notes for ${suggestion.employee?.fullName}'s suggestion`"
+                  placeholder="Enter notes...">
                 <div class="mt-1">
                   <button class="btn btn-sm btn-success me-1" @click="saveNotes(suggestion.id)">Save</button>
                   <button class="btn btn-sm btn-secondary" @click="cancelEditingNotes(suggestion.id)">Cancel</button>
@@ -170,7 +177,8 @@
             </td>
           </tr>
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   </div>
 </template>

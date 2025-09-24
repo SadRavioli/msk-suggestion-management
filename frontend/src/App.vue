@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header class="bg-primary text-white py-4 mb-4">
+    <header class="vitruvian text-white py-4 mb-4">
       <div class="container">
         <div class="d-flex align-items-center">
           <img src="/favicon.png" alt="Logo" class="me-3" style="height: 48px; width: 48px;">
@@ -21,7 +21,7 @@
       </div>
 
       <div v-else-if="error" class="alert alert-danger" role="alert">
-        <h4 class="alert-heading">Error Loading Data</h4>
+        <h2 class="alert-heading">Error Loading Data</h2>
         <p>{{ error }}</p>
         <button class="btn btn-outline-danger" @click="retryLoad">Try Again</button>
       </div>
@@ -38,7 +38,7 @@
       </div>
     </main>
 
-    <FloatActionButton @click="showCreateModal = true" />
+    <FloatActionButton class="vitruvian" @click="showCreateModal = true" />
 
     <CreateSuggestionModal
       :show="showCreateModal"
@@ -132,6 +132,10 @@ body {
 
 .container {
   max-width: 1200px;
+}
+
+.vitruvian {
+  background-color: #023839;
 }
 
 .section {

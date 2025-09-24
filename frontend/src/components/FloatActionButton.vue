@@ -1,9 +1,10 @@
 <template>
-  <button 
-    class="btn btn-primary fab-button"
+  <button
+    class="btn btn-primary fab-button vitruvian"
     @click="$emit('click')"
-    type="button">
-    <i class="bi bi-plus-lg"></i>
+    type="button"
+    aria-label="Add new suggestion">
+    <i class="bi bi-plus-lg" aria-hidden="true"></i>
   </button>
 </template>
 
@@ -34,5 +35,9 @@ export default {
 .fab-button:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.vitruvian {
+  background-color: #023839;
 }
 </style>

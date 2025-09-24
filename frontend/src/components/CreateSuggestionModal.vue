@@ -6,7 +6,7 @@
         
         <!-- Modal header -->
         <div class="modal-header">
-          <h5 class="modal-title">Create New Suggestion</h5>
+          <h2 class="modal-title h5">Create New Suggestion</h2>
           <button type="button" class="btn-close" @click="closeModal"></button>
         </div>
         

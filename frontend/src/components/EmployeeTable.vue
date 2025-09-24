@@ -14,7 +14,7 @@
           <td scope="row">{{ employee.fullName }}</td>
           <td>{{ employee.department }}</td>
           <td>
-            <span :class="getRiskClass(employee.riskLevel)">
+            <span :class="getRiskClass(employee.riskLevel)" class="badge">
               {{ employee.riskLevel }}
             </span>
           </td>
@@ -37,9 +37,9 @@ export default {
     getRiskClass(riskLevel) {
         riskLevel = riskLevel.toLowerCase();
       return {
-        'text-danger': riskLevel === 'high',
-        'text-warning': riskLevel === 'medium',
-        'text-success': riskLevel === 'low'
+        'bg-danger text-white': riskLevel === 'high',
+        'bg-warning text-dark': riskLevel === 'medium',
+        'bg-success text-white': riskLevel === 'low'
       }
     }
   }
