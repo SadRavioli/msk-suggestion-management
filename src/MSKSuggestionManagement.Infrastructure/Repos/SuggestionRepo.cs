@@ -48,6 +48,8 @@ namespace MSKSuggestionManagement.Infrastructure.Repos
 
             if (status == SuggestionStatus.Completed)
                 suggestion.DateCompleted = DateTime.UtcNow;
+            else
+                suggestion.DateCompleted = null;
 
             await _DbContext.SaveChangesAsync();
             return suggestion;

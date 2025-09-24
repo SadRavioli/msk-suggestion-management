@@ -280,7 +280,15 @@ export default {
     },
     async handleStatusUpdate(suggestionId, newStatus) {
       try {
-        await suggestionService.updateStatus(suggestionId, newStatus);
+        const updatedSuggestion = await suggestionService.updateStatus(suggestionId, newStatus);
+
+        const suggestion = this.suggestions.find(s => s.id === suggestionId);
+        if (suggestion && updatedSuggestion) {
+          suggestion.status = updatedSuggestion.status;
+          suggestion.dateUpdated = updatedSuggestion.dateUpdated;
+          suggestion.dateCompleted = updatedSuggestion.dateCompleted;
+        }
+
         console.log(`Status of suggestion ${suggestionId} updated to ${newStatus}`);
       } catch (error) {
         console.error('Error updating status:', error);
